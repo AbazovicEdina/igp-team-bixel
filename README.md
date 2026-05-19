@@ -5,8 +5,8 @@
 ██╔══██╗██║╚██╗██╔╝██╔════╝██║
 ██████╔╝██║ ╚███╔╝ █████╗  ██║
 ██╔══██╗██║ ██╔██╗ ██╔══╝  ██║
-██████╔╝██║██╔╝ ██╗███████╗███████╗
-╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝
+     ██████╔╝██║██╔╝ ██╗███████╗███████╗
+     ╚═════╝ ╚═╝╚═╝  ╚═╝╚══════╝╚══════╝
 ```
 
 ### *Team Bixel presents*
@@ -79,7 +79,7 @@ Das Soundboard ist Teil des Horror-Erlebnisses.
 
 <div align="center">
 
-| | Name | |
+| | Name | Rollen |
 |:---:|:---:|:---:|
 | 🌊 | **Edina** | |
 | 🎛️ | **Lorena** | |
@@ -105,7 +105,7 @@ Das Soundboard ist Teil des Horror-Erlebnisses.
 
 <div align="center">
 
-*„Was auch immer in der Tiefe wartet – wir haben zuerst gesendet."*
+<!-- *„Was auch immer in der Tiefe wartet – wir haben zuerst gesendet."* -->
 
 **〰 Team Bixel · 2026 〰**
 
