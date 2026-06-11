@@ -746,6 +746,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1abddad252b345449bcf6a87691e7077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TransmissionController
+  transmitKey: 13
+  clearKey: 8
 --- !u!1001 &1083168615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -909,6 +911,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   CurrentState: 0
+  currentDay: 1
+  finalDay: 15
+  requiredContacts: 20
+  nextDayKey: 110
 --- !u!1 &1511239205
 GameObject:
   m_ObjectHideFlags: 0
@@ -953,6 +959,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c32f66995ea74384890241ddbd1a83f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LogbookManager
+  confirmedContacts: []
+  reportedSignals: []
 --- !u!1 &1599268500
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,6 +970,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1599268501}
+  - component: {fileID: 1599268507}
+  - component: {fileID: 1599268506}
+  - component: {fileID: 1599268505}
+  - component: {fileID: 1599268504}
+  - component: {fileID: 1599268503}
+  - component: {fileID: 1599268508}
   m_Layer: 0
   m_Name: Mangers
   m_TagString: Untagged
@@ -990,6 +1004,88 @@ Transform:
   - {fileID: 901492464}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1599268503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599268500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abddad252b345449bcf6a87691e7077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TransmissionController
+  transmitKey: 13
+  clearKey: 8
+--- !u!114 &1599268504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599268500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c32f66995ea74384890241ddbd1a83f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LogbookManager
+  confirmedContacts: []
+  reportedSignals: []
+--- !u!114 &1599268505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599268500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436ee1cc1089a1146acdfb056a5ad376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResponseDatabase
+--- !u!114 &1599268506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599268500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eef5e2aeb314a24485195a5ff2f6cf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SequenceBuilder
+  currentSequence: 
+--- !u!114 &1599268507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599268500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15f79486a3060374886ec9275c93ce16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  CurrentState: 0
+  currentDay: 1
+  finalDay: 15
+  requiredContacts: 20
+  nextDayKey: 110
+--- !u!114 &1599268508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1599268500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 651d4b4cdccb87c479dedba8dc0bd4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoryEventManager
 --- !u!1 &1976712148
 GameObject:
   m_ObjectHideFlags: 0
