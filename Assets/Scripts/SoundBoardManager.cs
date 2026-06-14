@@ -37,6 +37,8 @@ public class SoundboardManager : MonoBehaviour
 
     public void OnButtonPressed(int id)
     {
+        Debug.Log("Button gedrückt: " + id);
+
         SequenceBuilder.Instance.AddSymbol(id);
     }
 }
