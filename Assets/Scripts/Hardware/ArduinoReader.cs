@@ -11,6 +11,8 @@ public class ArduinoReader : MonoBehaviour
     [SerializeField]
     private int baudRate = 9600;
 
+    private bool arduinoConnected = false;
+
     private void Start()
     {
         try
@@ -19,37 +21,43 @@ public class ArduinoReader : MonoBehaviour
             serialPort.ReadTimeout = 50;
             serialPort.Open();
 
+            arduinoConnected = true;
+
             Debug.Log("Arduino verbunden auf " + portName);
         }
-        catch (System.Exception e)
+        catch
         {
-            Debug.LogError("Arduino Fehler: " + e.Message);
+            Debug.Log("Arduino nicht gefunden. Tastatur-Fallback aktiv.");
         }
     }
 
     private void Update()
 {
-    if (serialPort == null || !serialPort.IsOpen)
+    if (!arduinoConnected)
         return;
 
     try
     {
         string data = serialPort.ReadLine().Trim();
 
+        Debug.Log("Arduino Daten: [" + data + "]");
+
         if (int.TryParse(data, out int keyId))
         {
+            Debug.Log("Sende Taste: " + keyId);
+
             SoundboardManager.Instance?.OnButtonPressed(keyId);
+        }
+        else
+        {
+            Debug.Log("Konnte nicht parsen: " + data);
         }
     }
     catch (System.TimeoutException)
     {
-        // normal, ignorieren
-    }
-    catch (System.Exception e)
-    {
-        Debug.LogWarning(e.Message);
     }
 }
+
     private void OnApplicationQuit()
     {
         if (serialPort != null && serialPort.IsOpen)
