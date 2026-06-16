@@ -20,6 +20,11 @@ public class SequenceBuilder : MonoBehaviour
             "Sequenz: " +
             string.Join(",", currentSequence)
         );
+
+    if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.NotifySymbolPressed();
+        }     
     }
 
     public void Clear()

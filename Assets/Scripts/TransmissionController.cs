@@ -71,6 +71,11 @@ public class TransmissionController : MonoBehaviour
 
         Debug.Log("Transmission gesendet: " + ConvertSequenceToKey(sequence));
 
+        if (TutorialManager.Instance != null)
+            {
+                TutorialManager.Instance.NotifyTransmissionSent();
+            }
+
         ResponseType response = ResponseDatabase.Instance.GetResponse(sequence);
 
         if (GameManager.Instance != null)
@@ -82,7 +87,7 @@ public class TransmissionController : MonoBehaviour
 
         SequenceBuilder.Instance.Clear();
 
-        if (GameManager.Instance != null)
+        if (GameManager.Instance != null && !GameManager.Instance.IsGameEnded)
         {
             GameManager.Instance.SetState(GameState.Playing);
         }
@@ -112,6 +117,10 @@ public class TransmissionController : MonoBehaviour
                             if (GameManager.Instance != null)
                             {
                                 GameManager.Instance.OnConfirmedContactAdded();
+                            }
+                            if (TutorialManager.Instance != null)
+                            {
+                                TutorialManager.Instance.NotifyContactConfirmed();
                             }
                         }
                 }
