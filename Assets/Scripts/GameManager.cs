@@ -104,8 +104,8 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameManager: Neuer bestätigter Kontakt.");
         Debug.Log("Fortschritt: " + ConfirmedContacts + " / " + requiredContacts);
 
-        CheckWinCondition();
         CheckStoryProgression();
+        CheckWinCondition();
     }
 
     public void EndCurrentDay()
@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
         SetState(GameState.EndingWin);
 
-        Debug.Log("WIN: 20 bestätigte Kontakte wurden rechtzeitig dokumentiert.");
+        Debug.Log("WIN: " + requiredContacts + " bestätigte Kontakte wurden rechtzeitig dokumentiert.");
     }
 
     private void TriggerLose()
@@ -178,5 +178,9 @@ public class GameManager : MonoBehaviour
         }
 
         StoryEventManager.Instance.CheckStoryEvents(currentDay, ConfirmedContacts);
+}
+public bool IsGameEnded
+{
+    get { return gameEnded; }
 }
 }

@@ -1016,12 +1016,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1599268501}
-  - component: {fileID: 1599268507}
-  - component: {fileID: 1599268506}
-  - component: {fileID: 1599268505}
-  - component: {fileID: 1599268504}
-  - component: {fileID: 1599268503}
-  - component: {fileID: 1599268508}
   m_Layer: 0
   m_Name: Mangers
   m_TagString: Untagged
@@ -1048,13 +1042,48 @@ Transform:
   - {fileID: 901492464}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1599268503
+--- !u!1 &1868068454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1868068461}
+  - component: {fileID: 1868068460}
+  - component: {fileID: 1868068459}
+  - component: {fileID: 1868068458}
+  - component: {fileID: 1868068457}
+  - component: {fileID: 1868068456}
+  - component: {fileID: 1868068455}
+  - component: {fileID: 1868068462}
+  m_Layer: 0
+  m_Name: GameLogicSystems
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1868068455
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599268500}
+  m_GameObject: {fileID: 1868068454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 651d4b4cdccb87c479dedba8dc0bd4fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoryEventManager
+--- !u!114 &1868068456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868068454}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1abddad252b345449bcf6a87691e7077, type: 3}
@@ -1062,13 +1091,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TransmissionController
   transmitKey: 13
   clearKey: 8
---- !u!114 &1599268504
+--- !u!114 &1868068457
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599268500}
+  m_GameObject: {fileID: 1868068454}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c32f66995ea74384890241ddbd1a83f9, type: 3}
@@ -1076,38 +1105,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LogbookManager
   confirmedContacts: []
   reportedSignals: []
---- !u!114 &1599268505
+--- !u!114 &1868068458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599268500}
+  m_GameObject: {fileID: 1868068454}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 436ee1cc1089a1146acdfb056a5ad376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResponseDatabase
---- !u!114 &1599268506
+--- !u!114 &1868068459
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599268500}
+  m_GameObject: {fileID: 1868068454}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0eef5e2aeb314a24485195a5ff2f6cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SequenceBuilder
   currentSequence: 
---- !u!114 &1599268507
+--- !u!114 &1868068460
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599268500}
+  m_GameObject: {fileID: 1868068454}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15f79486a3060374886ec9275c93ce16, type: 3}
@@ -1118,18 +1147,36 @@ MonoBehaviour:
   finalDay: 15
   requiredContacts: 20
   nextDayKey: 110
---- !u!114 &1599268508
+--- !u!4 &1868068461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1868068454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 755.2987, y: 0, z: -244.81003}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1868068462
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1599268500}
+  m_GameObject: {fileID: 1868068454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 651d4b4cdccb87c479dedba8dc0bd4fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a6f12e9acd4b3142a0bc85db0b5d287, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StoryEventManager
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
+  startTutorialOnPlay: 1
+  currentStep: 0
+  tutorialCompleted: 0
 --- !u!1 &1976712148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,3 +1337,4 @@ SceneRoots:
   - {fileID: 2095532618}
   - {fileID: 1254181072}
   - {fileID: 1083168615}
+  - {fileID: 1868068461}

@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum StoryEventType
 {
+    DayFive,
     FirstContact,
     DisturbanceStarts,
     RadarContact,
     HallucinationPhase,
     FinalDiscovery,
-    DayFive,
     FinalDay
 }
 
@@ -17,6 +18,8 @@ public class StoryEventManager : MonoBehaviour
     public static StoryEventManager Instance;
 
     private HashSet<StoryEventType> triggeredEvents = new HashSet<StoryEventType>();
+
+    public event Action<StoryEventType> OnStoryEventTriggered;
 
     private void Awake()
     {
@@ -31,6 +34,12 @@ public class StoryEventManager : MonoBehaviour
 
     public void CheckStoryEvents(int currentDay, int confirmedContacts)
     {
+        CheckDayEvents(currentDay);
+        CheckContactEvents(confirmedContacts);
+    }
+
+    private void CheckDayEvents(int currentDay)
+    {
         if (currentDay >= 5)
         {
             TriggerEventOnce(StoryEventType.DayFive);
@@ -40,7 +49,10 @@ public class StoryEventManager : MonoBehaviour
         {
             TriggerEventOnce(StoryEventType.FinalDay);
         }
+    }
 
+    private void CheckContactEvents(int confirmedContacts)
+    {
         if (confirmedContacts >= 1)
         {
             TriggerEventOnce(StoryEventType.FirstContact);
@@ -78,7 +90,17 @@ public class StoryEventManager : MonoBehaviour
 
         Debug.Log("STORY EVENT ausgelöst: " + storyEvent);
 
-        // Hier können später andere Systeme andocken:
-        // AudioManager, DistortionManager, RadarEventManager, UI, Dialoge usw.
+        OnStoryEventTriggered?.Invoke(storyEvent);
+    }
+
+    public bool HasEventTriggered(StoryEventType storyEvent)
+    {
+        return triggeredEvents.Contains(storyEvent);
+    }
+
+    public void ResetStoryEvents()
+    {
+        triggeredEvents.Clear();
+        Debug.Log("Story Events wurden zurückgesetzt.");
     }
 }
