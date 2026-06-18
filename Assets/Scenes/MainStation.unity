@@ -1051,11 +1051,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1868068461}
-  - component: {fileID: 1868068460}
-  - component: {fileID: 1868068459}
   - component: {fileID: 1868068458}
-  - component: {fileID: 1868068457}
-  - component: {fileID: 1868068456}
   - component: {fileID: 1868068455}
   - component: {fileID: 1868068462}
   m_Layer: 0
@@ -1077,34 +1073,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 651d4b4cdccb87c479dedba8dc0bd4fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StoryEventManager
---- !u!114 &1868068456
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1868068454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1abddad252b345449bcf6a87691e7077, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TransmissionController
-  transmitKey: 13
-  clearKey: 8
---- !u!114 &1868068457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1868068454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c32f66995ea74384890241ddbd1a83f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LogbookManager
-  confirmedContacts: []
-  reportedSignals: []
 --- !u!114 &1868068458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1117,36 +1085,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436ee1cc1089a1146acdfb056a5ad376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResponseDatabase
---- !u!114 &1868068459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1868068454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0eef5e2aeb314a24485195a5ff2f6cf2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SequenceBuilder
-  currentSequence: 
---- !u!114 &1868068460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1868068454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15f79486a3060374886ec9275c93ce16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  CurrentState: 0
-  currentDay: 1
-  finalDay: 15
-  requiredContacts: 20
-  nextDayKey: 110
 --- !u!4 &1868068461
 Transform:
   m_ObjectHideFlags: 0
