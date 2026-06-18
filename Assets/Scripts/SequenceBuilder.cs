@@ -5,6 +5,9 @@ public class SequenceBuilder : MonoBehaviour
 {
     public static SequenceBuilder Instance;
 
+    [SerializeField]
+    private RuneDisplay[] runeDisplays;
+
     public List<int> currentSequence = new();
 
     private void Awake()
@@ -16,15 +19,17 @@ public class SequenceBuilder : MonoBehaviour
     {
         currentSequence.Add(id);
 
-        Debug.Log(
-            "Sequenz: " +
-            string.Join(",", currentSequence)
-        );
+        Debug.Log("Sequenz: " + string.Join(",", currentSequence));
 
-    if (TutorialManager.Instance != null)
+        if (id >= 0 && id < runeDisplays.Length)
+        {
+            runeDisplays[id].Activate();
+        }
+
+        if (TutorialManager.Instance != null)
         {
             TutorialManager.Instance.NotifySymbolPressed();
-        }     
+        }
     }
 
     public void Clear()
