@@ -5,8 +5,9 @@ public class TransmissionController : MonoBehaviour
 {
     public static TransmissionController Instance;
 
-    [SerializeField] private KeyCode transmitKey = KeyCode.Return;
     [SerializeField] private KeyCode clearKey = KeyCode.Backspace;
+    [SerializeField] private KeyCode transmitKey = KeyCode.Return;
+
 
     private void Awake()
     {
@@ -19,48 +20,45 @@ public class TransmissionController : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
+   private void Update()
+{
+    if (Input.GetKeyDown(transmitKey))
     {
-        // Nur zum Testen:
-        // Enter = Sequenz absenden
-        // Backspace = Sequenz löschen
-
-        if (Input.GetKeyDown(transmitKey))
-        {
-            SubmitTransmission();
-        }
-
-        if (Input.GetKeyDown(clearKey))
-        {
-            ClearCurrentSequence();
-        }
+        SubmitTransmission();
     }
+
+    if (Input.GetKeyDown(clearKey))
+    {
+        ClearCurrentSequence();
+    }
+}
 
     public void SubmitTransmission()
     {
-        if (GameManager.Instance != null && !GameManager.Instance.CanAcceptGameplayInput())
+        if (GameManager.Instance != null &&
+            !GameManager.Instance.CanAcceptGameplayInput())
         {
-            Debug.Log("Transmission nicht möglich. Aktueller State: " + GameManager.Instance.CurrentState);
             return;
         }
 
         if (SequenceBuilder.Instance == null)
         {
-            Debug.LogError("Transmission fehlgeschlagen: SequenceBuilder fehlt in der Szene.");
+            Debug.LogError("SequenceBuilder fehlt.");
             return;
         }
 
         if (ResponseDatabase.Instance == null)
         {
-            Debug.LogError("Transmission fehlgeschlagen: ResponseDatabase fehlt in der Szene.");
+            Debug.LogError("ResponseDatabase fehlt.");
             return;
         }
 
-        List<int> sequence = new List<int>(SequenceBuilder.Instance.currentSequence);
+        List<int> sequence =
+            new List<int>(SequenceBuilder.Instance.currentSequence);
 
-        if (sequence.Count == 0)
+        if (sequence.Count != 3)
         {
-            Debug.LogWarning("Transmission fehlgeschlagen: Keine Sequenz eingegeben.");
+            Debug.LogWarning("Eine Sequenz muss genau 3 Runen enthalten.");
             return;
         }
 
@@ -69,81 +67,56 @@ public class TransmissionController : MonoBehaviour
             GameManager.Instance.SetState(GameState.Transmitting);
         }
 
-        Debug.Log("Transmission gesendet: " + ConvertSequenceToKey(sequence));
+        bool success =
+            ResponseDatabase.Instance.CheckCurrentContact(sequence);
 
-        if (TutorialManager.Instance != null)
+        if (success)
+        {
+            string successMessage =
+                "CONTACT ESTABLISHED\n\n" +
+                "CONTACT " +
+                ResponseDatabase.Instance.GetCurrentContactIndex() +
+                " / " +
+                ResponseDatabase.Instance.GetTotalContacts();
+
+            ReceiveDisplay.Instance?.ShowMessage(successMessage);
+
+            LogbookManager.Instance?.AddEntry(
+                sequence,
+                "CONTACT ESTABLISHED"
+            );
+
+            if (TutorialManager.Instance != null)
             {
-                TutorialManager.Instance.NotifyTransmissionSent();
+                TutorialManager.Instance.NotifyContactConfirmed();
             }
 
-        ResponseType response = ResponseDatabase.Instance.GetResponse(sequence);
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.OnConfirmedContactAdded();
+            }
 
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.SetState(GameState.Receiving);
+            ResponseDatabase.Instance.AdvanceContact();
         }
+        else
+        {
+            string hint =
+                ResponseDatabase.Instance.GetSignalHint(sequence);
 
-        HandleResponse(sequence, response);
+            ReceiveDisplay.Instance?.ShowMessage(hint);
 
+            LogbookManager.Instance?.AddEntry(
+                sequence,
+                hint
+            );
+        }
+        GameManager.Instance?.OnTransmissionSent();
         SequenceBuilder.Instance.Clear();
 
-        if (GameManager.Instance != null && !GameManager.Instance.IsGameEnded)
+        if (GameManager.Instance != null &&
+            !GameManager.Instance.IsGameEnded)
         {
             GameManager.Instance.SetState(GameState.Playing);
-        }
-    }
-
-    private void HandleResponse(List<int> sequence, ResponseType responseType)
-    {
-        string sequenceKey = ConvertSequenceToKey(sequence);
-
-        switch (responseType)
-        {
-            case ResponseType.None:
-                Debug.Log("Keine Antwort für Sequenz: " + sequenceKey);
-                break;
-
-            case ResponseType.Identical:
-                Debug.Log("Identische Antwort erhalten. Kontakt bestätigt: " + sequenceKey);
-
-                if (LogbookManager.Instance != null)
-                {
-                    bool wasAdded = LogbookManager.Instance.TryAddConfirmedSequence(sequence);
-
-                    if (wasAdded)
-                        {
-                            Debug.Log("Kontaktzahl: " + LogbookManager.Instance.ConfirmedContactCount);
-
-                            if (GameManager.Instance != null)
-                            {
-                                GameManager.Instance.OnConfirmedContactAdded();
-                            }
-                            if (TutorialManager.Instance != null)
-                            {
-                                TutorialManager.Instance.NotifyContactConfirmed();
-                            }
-                        }
-                }
-                else
-                {
-                    Debug.LogWarning("LogbookManager fehlt in der Szene. Kontakt wurde nicht gespeichert.");
-                }
-
-                break;
-
-            case ResponseType.Distorted:
-                Debug.Log("Verzerrte Antwort erhalten: " + sequenceKey);
-
-                if (LogbookManager.Instance != null)
-                {
-                    LogbookManager.Instance.AddReportedSignal(sequence, responseType);
-                }
-                else
-                {
-                    Debug.LogWarning("LogbookManager fehlt in der Szene. Verzerrtes Signal wurde nicht gemeldet.");
-                }
-
-                break;
         }
     }
 
@@ -151,16 +124,11 @@ public class TransmissionController : MonoBehaviour
     {
         if (SequenceBuilder.Instance == null)
         {
-            Debug.LogError("Sequenz kann nicht gelöscht werden: SequenceBuilder fehlt.");
             return;
         }
 
         SequenceBuilder.Instance.Clear();
-        Debug.Log("Aktuelle Sequenz gelöscht.");
-    }
 
-    private string ConvertSequenceToKey(List<int> sequence)
-    {
-        return string.Join("-", sequence);
+        Debug.Log("Aktuelle Sequenz gelöscht.");
     }
 }

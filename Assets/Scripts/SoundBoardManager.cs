@@ -30,7 +30,7 @@ public class SoundboardManager : MonoBehaviour
         {
             if (Input.GetKeyDown(buttonKeys[i]))
             {
-                OnButtonPressed(i);
+                OnButtonPressed(i+1);
             }
         }
     }

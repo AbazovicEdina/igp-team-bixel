@@ -1168,7 +1168,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TransmissionController
   clearKey: 8
-  transmitKey: 13
 --- !u!114 &910192447
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1532,9 +1531,8 @@ MonoBehaviour:
   CurrentState: 0
   currentDay: 1
   finalDay: 15
-  requiredContacts: 20
+  requiredContacts: 5
   nextDayKey: 110
-  transmissionsPerDay: 3
 --- !u!1 &1511239205
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,40 +22,20 @@ public class GameManager : MonoBehaviour
     [Header("Progress")]
     [SerializeField] private int currentDay = 1;
     [SerializeField] private int finalDay = 15;
-    [SerializeField] private int requiredContacts = 20;
+    [SerializeField] private int requiredContacts = 5;
 
     [Header("Debug Controls")]
     [SerializeField] private KeyCode nextDayKey = KeyCode.N;
 
     private bool gameEnded = false;
 
-    public int CurrentDay
-    {
-        get { return currentDay; }
-    }
+    private int confirmedContacts = 0;
 
-    public int FinalDay
-    {
-        get { return finalDay; }
-    }
-
-    public int RequiredContacts
-    {
-        get { return requiredContacts; }
-    }
-
-    public int ConfirmedContacts
-    {
-        get
-        {
-            if (LogbookManager.Instance == null)
-            {
-                return 0;
-            }
-
-            return LogbookManager.Instance.ConfirmedContactCount;
-        }
-    }
+    public int CurrentDay => currentDay;
+    public int FinalDay => finalDay;
+    public int RequiredContacts => requiredContacts;
+    public int ConfirmedContacts => confirmedContacts;
+    public bool IsGameEnded => gameEnded;
 
     private void Awake()
     {
@@ -74,13 +54,11 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Spiel gestartet.");
         Debug.Log("Tag: " + currentDay + " / " + finalDay);
-        Debug.Log("Ziel: " + requiredContacts + " bestätigte Kontakte.");
+        Debug.Log("Ziel: " + requiredContacts + " Kontakte.");
     }
 
     private void Update()
     {
-        // Nur zum Testen:
-        // Mit N springst du zum nächsten Tag.
         if (Input.GetKeyDown(nextDayKey))
         {
             EndCurrentDay();
@@ -96,13 +74,17 @@ public class GameManager : MonoBehaviour
     public void SetState(GameState newState)
     {
         CurrentState = newState;
-        Debug.Log("GameState geändert zu: " + CurrentState);
     }
 
     public void OnConfirmedContactAdded()
     {
-        Debug.Log("GameManager: Neuer bestätigter Kontakt.");
-        Debug.Log("Fortschritt: " + ConfirmedContacts + " / " + requiredContacts);
+        confirmedContacts++;
+
+        Debug.Log(
+            "Kontakt bestätigt: " +
+            confirmedContacts +
+            " / " +
+            requiredContacts);
 
         CheckStoryProgression();
         CheckWinCondition();
@@ -111,11 +93,7 @@ public class GameManager : MonoBehaviour
     public void EndCurrentDay()
     {
         if (gameEnded)
-        {
             return;
-        }
-
-        Debug.Log("Tag " + currentDay + " beendet.");
 
         currentDay++;
 
@@ -125,18 +103,21 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Neuer Tag gestartet: " + currentDay + " / " + finalDay);
+        Debug.Log(
+            "Neuer Tag: " +
+            currentDay +
+            " / " +
+            finalDay);
+
         CheckStoryProgression();
     }
 
     private void CheckWinCondition()
     {
         if (gameEnded)
-        {
             return;
-        }
 
-        if (ConfirmedContacts >= requiredContacts)
+        if (confirmedContacts >= requiredContacts)
         {
             TriggerWin();
         }
@@ -145,42 +126,55 @@ public class GameManager : MonoBehaviour
     private void CheckLoseCondition()
     {
         if (gameEnded)
-        {
             return;
-        }
 
-        if (currentDay > finalDay && ConfirmedContacts < requiredContacts)
-        {
-            TriggerLose();
-        }
+        TriggerLose();
     }
 
     private void TriggerWin()
     {
         gameEnded = true;
+
         SetState(GameState.EndingWin);
 
-        Debug.Log("WIN: " + requiredContacts + " bestätigte Kontakte wurden rechtzeitig dokumentiert.");
+        Debug.Log("WIN");
     }
 
     private void TriggerLose()
     {
         gameEnded = true;
+
         SetState(GameState.EndingLose);
 
-        Debug.Log("LOSE: Tag 15 ist vorbei und es wurden nicht genug Kontakte dokumentiert.");
+        Debug.Log("LOSE");
     }
+
     private void CheckStoryProgression()
     {
         if (StoryEventManager.Instance == null)
-        {
             return;
-        }
 
-        StoryEventManager.Instance.CheckStoryEvents(currentDay, ConfirmedContacts);
-}
-public bool IsGameEnded
+        StoryEventManager.Instance.CheckStoryEvents(
+            currentDay,
+            confirmedContacts);
+    }
+    [SerializeField] private int transmissionsPerDay = 3;
+
+private int transmissionsUsedToday = 0;
+
+public int AttemptsLeftToday
 {
-    get { return gameEnded; }
+    get { return transmissionsPerDay - transmissionsUsedToday; }
+}
+
+public void OnTransmissionSent()
+{
+    transmissionsUsedToday++;
+
+    if (transmissionsUsedToday >= transmissionsPerDay)
+    {
+        transmissionsUsedToday = 0;
+        EndCurrentDay();
+    }
 }
 }

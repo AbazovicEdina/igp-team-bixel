@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ResponseType
-{
-    None,
-    Identical,
-    Distorted
-}
-
 public class ResponseDatabase : MonoBehaviour
 {
     public static ResponseDatabase Instance;
 
-    private Dictionary<string, ResponseType> responses = new Dictionary<string, ResponseType>();
+    private int currentContact = 0;
+
+    private List<List<int>> contacts = new()
+    {
+        new() { 1, 2, 3 },
+        new() { 4, 6, 2 },
+        new() { 3, 5, 7 },
+        new() { 8, 1, 5 },
+        new() { 2, 7, 4 }
+    };
 
     private void Awake()
     {
@@ -23,95 +25,76 @@ public class ResponseDatabase : MonoBehaviour
         }
 
         Instance = this;
-
-        RegisterConfirmedSequences();
-        RegisterDistortedSequences();
     }
 
-    private void RegisterConfirmedSequences()
+    public List<int> GetCurrentTarget()
     {
-        // 20 bestätigte Kontakt-Sequenzen
-        // IDs gehen aktuell von 0 bis 7, weil der SoundboardManager Tastatur 1-8 intern als 0-7 speichert.
-
-        Register("0-1-2", ResponseType.Identical);
-        Register("1-3-5", ResponseType.Identical);
-        Register("2-4-6", ResponseType.Identical);
-        Register("3-5-7", ResponseType.Identical);
-        Register("0-2-4", ResponseType.Identical);
-
-        Register("1-4-7", ResponseType.Identical);
-        Register("2-5-0", ResponseType.Identical);
-        Register("3-6-1", ResponseType.Identical);
-        Register("4-7-2", ResponseType.Identical);
-        Register("5-0-3", ResponseType.Identical);
-
-        Register("0-3-6-1", ResponseType.Identical);
-        Register("1-4-7-2", ResponseType.Identical);
-        Register("2-5-0-3", ResponseType.Identical);
-        Register("3-6-1-4", ResponseType.Identical);
-        Register("4-7-2-5", ResponseType.Identical);
-
-        Register("0-2-5-7", ResponseType.Identical);
-        Register("1-3-6-0", ResponseType.Identical);
-        Register("2-4-7-1", ResponseType.Identical);
-        Register("3-5-0-2", ResponseType.Identical);
-        Register("4-6-1-3", ResponseType.Identical);
+        return contacts[currentContact];
     }
 
-    private void RegisterDistortedSequences()
+    public bool CheckCurrentContact(List<int> input)
     {
-        // Verzerrte Signale: zählen nicht als bestätigter Kontakt,
-        // können aber später an HQ gemeldet werden.
+        List<int> target = GetCurrentTarget();
 
-        Register("0-0-1", ResponseType.Distorted);
-        Register("1-1-2", ResponseType.Distorted);
-        Register("2-2-3", ResponseType.Distorted);
-        Register("3-3-4", ResponseType.Distorted);
-        Register("4-4-5", ResponseType.Distorted);
-
-        Register("7-6-5", ResponseType.Distorted);
-        Register("6-4-2", ResponseType.Distorted);
-        Register("5-3-1", ResponseType.Distorted);
-        Register("2-0-7", ResponseType.Distorted);
-        Register("7-0-2-4", ResponseType.Distorted);
-    }
-
-    private void Register(string sequenceKey, ResponseType responseType)
-    {
-        if (responses.ContainsKey(sequenceKey))
+        for (int i = 0; i < 3; i++)
         {
-            Debug.LogWarning("ResponseDatabase: Sequenz bereits vorhanden: " + sequenceKey);
-            return;
+            if (input[i] != target[i])
+            {
+                return false;
+            }
         }
 
-        responses.Add(sequenceKey, responseType);
+        return true;
     }
 
-    public ResponseType GetResponse(List<int> sequence)
+    public void AdvanceContact()
     {
-        string key = ConvertSequenceToKey(sequence);
-
-        if (responses.ContainsKey(key))
+        if (currentContact < contacts.Count - 1)
         {
-            return responses[key];
+            currentContact++;
+        }
+    }
+
+    public int GetCurrentContactIndex()
+    {
+        return currentContact + 1;
+    }
+
+    public int GetTotalContacts()
+    {
+        return contacts.Count;
+    }
+
+    public string GetSignalHint(List<int> input)
+    {
+        List<int> target = GetCurrentTarget();
+
+        int correctRunes = 0;
+        int correctPositions = 0;
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (input[i] == target[i])
+            {
+                correctPositions++;
+            }
         }
 
-        return ResponseType.None;
-    }
+        List<int> remainingTarget = new(target);
 
-    public bool IsKnownSequence(List<int> sequence)
-    {
-        string key = ConvertSequenceToKey(sequence);
-        return responses.ContainsKey(key);
-    }
+        foreach (int rune in input)
+        {
+            if (remainingTarget.Contains(rune))
+            {
+                correctRunes++;
 
-    public int GetKnownResponseCount()
-    {
-        return responses.Count;
-    }
+                remainingTarget.Remove(rune);
+            }
+        }
 
-    private string ConvertSequenceToKey(List<int> sequence)
-    {
-        return string.Join("-", sequence);
+        return
+            "SIGNAL ANALYSIS\n\n" +
+            "TONES MATCHED: " + correctRunes + "/3\n" +
+            "POSITIONS VERIFIED: " + correctPositions + "/3";
     }
 }

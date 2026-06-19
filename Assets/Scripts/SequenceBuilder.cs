@@ -15,22 +15,26 @@ public class SequenceBuilder : MonoBehaviour
         Instance = this;
     }
 
-    public void AddSymbol(int id)
+ public void AddSymbol(int id)
+{
+    if (currentSequence.Count >= 3)
     {
-        currentSequence.Add(id);
-
-        Debug.Log("Sequenz: " + string.Join(",", currentSequence));
-
-        if (id >= 0 && id < runeDisplays.Length)
-        {
-            runeDisplays[id].Activate();
-        }
-
-        if (TutorialManager.Instance != null)
-        {
-            TutorialManager.Instance.NotifySymbolPressed();
-        }
+        Debug.Log("Maximal 3 Runen erlaubt.");
+        return;
     }
+
+    currentSequence.Add(id);
+
+    Debug.Log(
+        "Sequenz: " +
+        string.Join(",", currentSequence)
+    );
+
+    if (TutorialManager.Instance != null)
+    {
+        TutorialManager.Instance.NotifySymbolPressed();
+    }
+}
 
     public void Clear()
     {
