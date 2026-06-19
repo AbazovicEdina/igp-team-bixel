@@ -98,18 +98,25 @@ public class TransmissionController : MonoBehaviour
 
             ResponseDatabase.Instance.AdvanceContact();
         }
-        else
-        {
-            string hint =
-                ResponseDatabase.Instance.GetSignalHint(sequence);
+       else
+{
+    SignalAnalysis analysis =
+        ResponseDatabase.Instance.AnalyzeSignal(sequence);
 
-            ReceiveDisplay.Instance?.ShowMessage(hint);
+    SequenceBuilder.Instance.ShowFeedback(analysis);
 
-            LogbookManager.Instance?.AddEntry(
-                sequence,
-                hint
-            );
-        }
+    string hint =
+        "SIGNAL ANALYSIS\n\n" +
+        "TONES MATCHED: " + analysis.correctRunes + "/3\n" +
+        "POSITIONS VERIFIED: " + analysis.correctPositions + "/3";
+
+    ReceiveDisplay.Instance?.ShowMessage(hint);
+
+    LogbookManager.Instance?.AddEntry(
+        sequence,
+        hint
+    );
+}
         GameManager.Instance?.OnTransmissionSent();
         SequenceBuilder.Instance.Clear();
 
@@ -131,4 +138,5 @@ public class TransmissionController : MonoBehaviour
 
         Debug.Log("Aktuelle Sequenz gelöscht.");
     }
+    
 }

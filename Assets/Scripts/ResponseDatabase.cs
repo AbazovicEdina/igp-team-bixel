@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class ResponseDatabase : MonoBehaviour
 {
+    
+
     public static ResponseDatabase Instance;
 
     private int currentContact = 0;
@@ -46,6 +48,46 @@ public class ResponseDatabase : MonoBehaviour
 
         return true;
     }
+
+   public SignalAnalysis AnalyzeSignal(List<int> input)
+{
+    List<int> target = GetCurrentTarget();
+
+    SignalAnalysis analysis = new();
+
+    List<int> remainingTarget = new(target);
+
+    // Zuerst exakte Positionen finden
+    for (int i = 0; i < 3; i++)
+    {
+        if (input[i] == target[i])
+        {
+            analysis.correctPositions++;
+            analysis.correctPosition[i] = true;
+
+            remainingTarget.Remove(input[i]);
+        }
+    }
+
+    // Dann richtige Rune, aber falsche Position
+    for (int i = 0; i < 3; i++)
+    {
+        if (analysis.correctPosition[i])
+            continue;
+
+        if (remainingTarget.Contains(input[i]))
+        {
+            analysis.correctRune[i] = true;
+            analysis.correctRunes++;
+
+            remainingTarget.Remove(input[i]);
+        }
+    }
+
+    analysis.correctRunes += analysis.correctPositions;
+
+    return analysis;
+}
 
     public void AdvanceContact()
     {

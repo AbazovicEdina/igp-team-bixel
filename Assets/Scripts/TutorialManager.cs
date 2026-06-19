@@ -49,25 +49,36 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void StartTutorial()
-    {
-        tutorialCompleted = false;
-        SetStep(TutorialStep.BuildSequence);
+ public void StartTutorial()
+{
+    tutorialCompleted = false;
+    symbolsEntered = 0;
 
-        Debug.Log("TUTORIAL: Drücke eine Symboltaste, um eine Sequenz zu bauen.");
+    SetStep(TutorialStep.BuildSequence);
+
+    Debug.Log("TUTORIAL: Drücke drei Symboltasten, um eine Sequenz zu bauen.");
+}
+
+private int symbolsEntered = 0;
+
+public void NotifySymbolPressed()
+{
+    if (currentStep != TutorialStep.BuildSequence)
+    {
+        return;
     }
 
-    public void NotifySymbolPressed()
+    symbolsEntered++;
+
+    if (symbolsEntered < 3)
     {
-        if (currentStep != TutorialStep.BuildSequence)
-        {
-            return;
-        }
-
-        SetStep(TutorialStep.SendSequence);
-
-        Debug.Log("TUTORIAL: Gut. Sende die Sequenz jetzt mit Enter.");
+        return;
     }
+
+    SetStep(TutorialStep.SendSequence);
+
+    Debug.Log("TUTORIAL: Gut. Sende die Sequenz jetzt mit Enter.");
+}
 
     public void NotifyTransmissionSent()
     {
@@ -96,7 +107,7 @@ public class TutorialManager : MonoBehaviour
         tutorialCompleted = true;
         SetStep(TutorialStep.Completed);
 
-        Debug.Log("TUTORIAL: Abgeschlossen. Ziel: Dokumentiere 20 bestätigte Kontakte vor Ende von Tag 15.");
+        Debug.Log("TUTORIAL: Abgeschlossen. Ziel: Dokumentiere 5 bestätigte Kontakte vor Ende von Tag 15.");
     }
 
     public void ResetTutorial()
