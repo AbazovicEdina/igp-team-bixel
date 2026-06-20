@@ -23,22 +23,35 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int currentDay = 1;
     [SerializeField] private int finalDay = 15;
     [SerializeField] private int requiredContacts = 5;
+
+    [Header("Day Screens")]
     [SerializeField] private GameObject dayCompleteScreen;
-    
     [SerializeField] private DayCompleteUI dayCompleteUI;
+    [SerializeField] private GameObject finalDayScreen;
+
+    [Header("Ending Screens")]
+    [SerializeField] private WinEndingUI winEndingUI;
+    [SerializeField] private LoseEndingUI loseEndingUI;
 
     [Header("Debug Controls")]
     [SerializeField] private KeyCode nextDayKey = KeyCode.N;
 
-    private bool gameEnded = false;
+    [SerializeField] private int transmissionsPerDay = 3;
 
+    private bool gameEnded = false;
     private int confirmedContacts = 0;
+    private int transmissionsUsedToday = 0;
 
     public int CurrentDay => currentDay;
     public int FinalDay => finalDay;
     public int RequiredContacts => requiredContacts;
     public int ConfirmedContacts => confirmedContacts;
     public bool IsGameEnded => gameEnded;
+
+    public int AttemptsLeftToday
+    {
+        get { return transmissionsPerDay - transmissionsUsedToday; }
+    }
 
     private void Awake()
     {
@@ -53,7 +66,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        dayCompleteScreen.SetActive(false);
+        if (dayCompleteScreen != null)
+            dayCompleteScreen.SetActive(false);
+
+        if (finalDayScreen != null)
+            finalDayScreen.SetActive(false);
+
         SetState(GameState.Playing);
 
         Debug.Log("Spiel gestartet.");
@@ -94,20 +112,80 @@ public class GameManager : MonoBehaviour
         CheckWinCondition();
     }
 
-public void EndCurrentDay()
-{
-    if (gameEnded)
-        return;
-
-    if (dayCompleteUI != null)
+    public void OnTransmissionSent()
     {
-        dayCompleteUI.Refresh();
+        transmissionsUsedToday++;
+
+        if (transmissionsUsedToday >= transmissionsPerDay)
+        {
+            transmissionsUsedToday = 0;
+            EndCurrentDay();
+        }
     }
 
-    dayCompleteScreen.SetActive(true);
+    public void EndCurrentDay()
+    {
+        if (gameEnded)
+            return;
 
-    SetState(GameState.LogbookOpen);
-}
+        if (currentDay >= finalDay)
+        {
+            CheckLoseCondition();
+            return;
+        }
+
+        if (currentDay == finalDay - 1)
+        {
+            if (dayCompleteScreen != null)
+                dayCompleteScreen.SetActive(false);
+
+            if (finalDayScreen != null)
+                finalDayScreen.SetActive(true);
+
+            SetState(GameState.LogbookOpen);
+            return;
+        }
+
+        if (dayCompleteUI != null)
+        {
+            dayCompleteUI.Refresh();
+        }
+
+        if (dayCompleteScreen != null)
+        {
+            dayCompleteScreen.SetActive(true);
+        }
+
+        SetState(GameState.LogbookOpen);
+    }
+
+    public void StartNextDay()
+    {
+        if (dayCompleteScreen != null)
+            dayCompleteScreen.SetActive(false);
+
+        currentDay++;
+
+        if (currentDay > finalDay)
+        {
+            CheckLoseCondition();
+            return;
+        }
+
+        SetState(GameState.Playing);
+        CheckStoryProgression();
+    }
+
+    public void BeginFinalDay()
+    {
+        if (finalDayScreen != null)
+            finalDayScreen.SetActive(false);
+
+        currentDay = finalDay;
+
+        SetState(GameState.Playing);
+        CheckStoryProgression();
+    }
 
     private void CheckWinCondition()
     {
@@ -134,6 +212,9 @@ public void EndCurrentDay()
 
         SetState(GameState.EndingWin);
 
+        if (winEndingUI != null)
+            winEndingUI.ShowWinEnding();
+
         Debug.Log("WIN");
     }
 
@@ -142,6 +223,9 @@ public void EndCurrentDay()
         gameEnded = true;
 
         SetState(GameState.EndingLose);
+
+        if (loseEndingUI != null)
+            loseEndingUI.ShowLoseEnding();
 
         Debug.Log("LOSE");
     }
@@ -155,43 +239,4 @@ public void EndCurrentDay()
             currentDay,
             confirmedContacts);
     }
-    [SerializeField] private int transmissionsPerDay = 3;
-
-private int transmissionsUsedToday = 0;
-
-public int AttemptsLeftToday
-{
-    get { return transmissionsPerDay - transmissionsUsedToday; }
-}
-
-public void OnTransmissionSent()
-{
-    transmissionsUsedToday++;
-
-    if (transmissionsUsedToday >= transmissionsPerDay)
-    {
-        transmissionsUsedToday = 0;
-        EndCurrentDay();
-    }
-}
-
-public void StartNextDay()
-{
-     
-
-    
-    dayCompleteScreen.SetActive(false);
-
-    currentDay++;
-
-    if (currentDay > finalDay)
-    {
-        CheckLoseCondition();
-        return;
-    }
-
-    SetState(GameState.Playing);
-
-    CheckStoryProgression();
-}
 }

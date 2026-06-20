@@ -31,8 +31,9 @@ public class OptionsMenuController : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public void BackToMainMenu()
-    {
-        SceneManager.LoadScene("HomePage");
-    }
+    public void Back()
+{
+    string returnScene = PlayerPrefs.GetString("OptionsReturnScene", "HomePage");
+    SceneManager.LoadScene(returnScene);
+}
 }

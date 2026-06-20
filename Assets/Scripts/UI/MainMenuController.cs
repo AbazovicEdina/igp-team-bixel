@@ -15,6 +15,7 @@ public class MainMenuController : MonoBehaviour
 
     public void OpenOptions()
     {
+        PlayerPrefs.SetString("OptionsReturnScene", "HomePage");
         SceneManager.LoadScene("OptionsMenu");
     }
 
