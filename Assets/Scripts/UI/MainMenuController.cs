@@ -25,8 +25,13 @@ public class MainMenuController : MonoBehaviour
     }
 
     public void ExitGame()
-    {
-        Debug.Log("Quit Game clicked");
-        Application.Quit();
-    }
+{
+    Debug.Log("Quit Game clicked");
+
+#if UNITY_EDITOR
+    UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
+#endif
+}
 }
