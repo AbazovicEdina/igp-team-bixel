@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        
         if (dayCompleteScreen != null)
             dayCompleteScreen.SetActive(false);
 

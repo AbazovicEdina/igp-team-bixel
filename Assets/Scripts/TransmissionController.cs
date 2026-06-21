@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TransmissionController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class TransmissionController : MonoBehaviour
 
     [SerializeField] private KeyCode clearKey = KeyCode.Backspace;
     [SerializeField] private KeyCode transmitKey = KeyCode.Return;
+    [SerializeField] private TMP_Text transmissionsLeftText;
 
 
     private void Awake()
@@ -19,7 +21,12 @@ public class TransmissionController : MonoBehaviour
 
         Instance = this;
     }
+private void Start()
+{
 
+      transmissionsLeftText.gameObject.SetActive(false);
+    RefreshTransmissionsLeft();
+}
    private void Update()
 {
     if (Input.GetKeyDown(transmitKey))
@@ -35,6 +42,7 @@ public class TransmissionController : MonoBehaviour
 
     public void SubmitTransmission()
     {
+    
         if (GameManager.Instance != null &&
             !GameManager.Instance.CanAcceptGameplayInput())
         {
@@ -118,6 +126,7 @@ public class TransmissionController : MonoBehaviour
     );
 }
         GameManager.Instance?.OnTransmissionSent();
+        RefreshTransmissionsLeft();
         SequenceBuilder.Instance.Clear();
 
         if (GameManager.Instance != null &&
@@ -138,5 +147,17 @@ public class TransmissionController : MonoBehaviour
 
         Debug.Log("Aktuelle Sequenz gelöscht.");
     }
-    
+ private void RefreshTransmissionsLeft()
+{
+    if (transmissionsLeftText == null || GameManager.Instance == null)
+        return;
+
+    transmissionsLeftText.text =
+        $"Transmissions left today: {GameManager.Instance.AttemptsLeftToday}";
+}
+public void ShowTransmissionsLeft()
+{
+    transmissionsLeftText.gameObject.SetActive(true);
+    RefreshTransmissionsLeft();
+}
 }

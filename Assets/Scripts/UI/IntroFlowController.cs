@@ -26,6 +26,7 @@ public class IntroFlowController : MonoBehaviour
 
     public void BeginDayOne()
     {
+        TransmissionController.Instance.ShowTransmissionsLeft();
         tutorialPanel.SetActive(false);
 
         if (gameplayUI != null)
