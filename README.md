@@ -11,7 +11,7 @@
 
 ### *Team Bixel presents*
 
-# 〰 DEEP SIGNAL 〰
+# 〰 ABYSSAL ECHO 〰
 
 **Underwater · Sound · Horror**
 
